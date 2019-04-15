@@ -1,35 +1,50 @@
 
-// import 'package:http';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import 'dart:io';
-
-class MovieService {
-  static const String _baseUrl = "https://dog.ceo/api";
-
-  static Future<DogResponse> getRandomBreed() async {
-    String fullUrl = "$_baseUrl/breeds/image/random";
-    var response = await http.get(fullUrl);
-    // return response.body;
-    final responseJson = json.decode(response.body);
-    return DogResponse(responseJson);
-    // return responseJson;
-
-    // HttpClient client = new HttpClient();
-    // var response = await client.getUrl(Uri.parse(fullUrl));
-    // var real = await response.close();
-    // String dataToReturn = "";
-    // real.transform(Utf8Decoder()).listen((data) => print(data));
-    // return dataToReturn;
-  }
+String getImageBaseUrl(String relativeImagePath, [int width = 185]) {
+  return "https://image.tmdb.org/t/p/w$width$relativeImagePath";
 }
 
-class DogResponse {
-  DogResponse(dynamic resp) {
-    this.status = resp['status'];
-    this.message = resp['message'];
+class MovieService {
+  static const String _baseUrl = "https://api.themoviedb.org/3";
+  static const String _apiKey = "API_KEY_HERE";
+
+  static Future<List<Movie>> getMovies([int pageNumber = 1]) async {
+    String fullUrl = "$_baseUrl/tv/top_rated?api_key=$_apiKey&page=$pageNumber";
+    var responseJson = json.decode((await http.get(fullUrl)).body);
+    var movieResponse = MovieResponse(responseJson);
+    return movieResponse.results;
   }
-  String status;
-  String message;
+
+}
+
+class Movie {
+  Movie(dynamic movieItemJson) {
+    name = movieItemJson['name'];
+    overview = movieItemJson['overview'];
+    backdropUrl = "${getImageBaseUrl(movieItemJson['backdrop_path'])}";
+    posterUrl = "${getImageBaseUrl(movieItemJson['poster_path'])}";
+    genreIds = (movieItemJson['genre_ids'] as List<dynamic>).map<int>((item) => item).toList();
+  }
+
+  String name;
+  String overview;
+  String backdropUrl;
+  String posterUrl;
+  List<int> genreIds;
+}
+
+class MovieResponse {
+  MovieResponse(dynamic movieResponseJson) {
+    page = movieResponseJson['page'];
+    totalResults = movieResponseJson['total_results'];
+    totalPages = movieResponseJson['total_pages'];
+    var allMovies = movieResponseJson['results'] as List<dynamic>;
+    results = allMovies.map<Movie>((movieItem) => Movie(movieItem)).toList();
+  }
+  int page;
+  int totalResults;
+  int totalPages;
+  List<Movie> results;
 }

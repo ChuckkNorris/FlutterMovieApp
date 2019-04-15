@@ -3,13 +3,17 @@ import 'movie-list.dart';
 
 void main() => runApp(MyApp());
 
+
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
+    final darkTheme = Theme.of(context).textTheme.apply(
+      bodyColor: Colors.white,
+      displayColor: Colors.white,
+    );
+    final originalTheme = ThemeData(
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the
@@ -20,7 +24,11 @@ class MyApp extends StatelessWidget {
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
         primarySwatch: Colors.blue,
-      ),
+        textTheme: darkTheme
+      );
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: originalTheme,
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
