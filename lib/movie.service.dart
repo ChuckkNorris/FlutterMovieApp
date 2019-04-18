@@ -8,7 +8,7 @@ String getImageBaseUrl(String relativeImagePath, [int width = 185]) {
 
 class MovieService {
   static const String _baseUrl = "https://api.themoviedb.org/3";
-  static const String _apiKey = "API_KEY_HERE";
+  static const String _apiKey = "1d24f7e213bcc3fc22382ffbf01e4cb2";
 
   static Future<List<Movie>> getMovies([int pageNumber = 1]) async {
     String fullUrl = "$_baseUrl/tv/top_rated?api_key=$_apiKey&page=$pageNumber";

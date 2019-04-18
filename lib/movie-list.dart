@@ -6,19 +6,20 @@ openUrl(String url) {
   launch(url);
 }
 
-movieListBuilder(List<Movie> allMovies, ScrollController scrollController) {
+ListView movieListBuilder(List<Movie> allMovies, ScrollController scrollController) {
     if (scrollController != null)
       print(scrollController.initialScrollOffset);
     return ListView.builder(
       controller: scrollController,
       padding: EdgeInsets.all(8.0),
       itemCount: allMovies.length,
-      itemExtent: 144.0,
+      itemExtent: 178.0,
       itemBuilder: (BuildContext context, int index) {
         Movie currMovie = allMovies[index];
         return Card(
           color: Color.fromRGBO(60, 60, 60, .5),
           child: Container(
+            // height: 144,
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: NetworkImage(currMovie.posterUrl),
@@ -33,7 +34,7 @@ movieListBuilder(List<Movie> allMovies, ScrollController scrollController) {
                   leading: Icon(Icons.album),
                   title: Text(currMovie.name,
                       style: TextStyle(color: Colors.amberAccent)),
-                  subtitle: Text(currMovie.overview),
+                  subtitle: Text(currMovie.overview, maxLines: 4),
                 ),
                 ButtonTheme.bar(
                   // make buttons use the appropriate styles for cards
